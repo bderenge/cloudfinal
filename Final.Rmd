@@ -1,0 +1,75 @@
+---
+title: "Final"
+author: "Ben Derenge and Maverick Something""
+date: "November 15, 2019"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+##Context
+This data comes from the 2018 Central Park Squirrel Census.
+
+
+Hectare is region
+https://data.cityofnewyork.us/Environment/2018-Squirrel-Census-Fur-Color-Map/fak5-wcft
+
+hectare squiirel number is the sequence of squirrels seen.
+
+```{r}
+library(readr)
+nyc_squirrels <- read_csv("C:/Users/bdere/Desktop/stat442/nyc_squirrels.csv")
+
+
+
+```
+
+
+
+##Fur Color
+```{r}
+library(ggplot2)
+
+table(nyc_squirrels$primary_fur_color)
+
+data <- data.frame(
+color <- c("Gray", "Cinnamon", "Black"),
+count <- c(2473, 392, 103)
+)
+
+
+data$fraction = data$count / sum(data$count)
+
+
+data$ymax = cumsum(data$fraction)
+
+# Compute the bottom of each rectangle
+data$ymin = c(0, head(data$ymax, n=-1))
+
+ggplot(data, aes(ymax=ymax, ymin=ymin, xmax=4, xmin=3, fill= color)) +
+     geom_rect() +
+ 
+     coord_polar(theta="y") +
+     xlim(c(2, 4))+
+  
+scale_fill_manual(values = c("Gray" = "darkgrey",
+                                  "Cinnamon" = "coral4",
+                                  "Black" = "Black"
+          ))
+
+```
+
+
+
+
+```{r}
+
+table(nyc_squirrels$location)
+
+```
+
+
+
+
